@@ -49,9 +49,3 @@ message calirecord {
     string record_key=5;
      record_version=6;
 }
-calirecord song1  = {
-    //             "date":input,
-    //             "artists":[
-    //                 {"name":"Me","member":"YES"},
-    //                 {"name":"Jon","member":"YES"}
-    //             ],  
