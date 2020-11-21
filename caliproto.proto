@@ -35,3 +35,9 @@ message Artist {
     enum Member {YES = 0;NO = 1;}
       Member member = 2;
 }
+message Song {
+    string title=1;
+    string genre=2;
+    string platform=3;
+}
+
