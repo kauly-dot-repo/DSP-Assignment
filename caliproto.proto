@@ -6,3 +6,12 @@ service  caliSongStorageSystem{
        rpc ReadRecordKeyVersion (keyVersion) returns (calirecord);
        rpc ReadCriterionCombination (CriterionCombination) returns (TotalRecords);
 }
+message TotalRecords {
+    repeated calirecord records = 1;
+}
+
+message CriterionCombination {
+    string ArtistName=1;
+    string SongTitle=2;
+    string bandName=3;
+}
