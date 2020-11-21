@@ -7,8 +7,6 @@ import ballerina/lang.'float;
 
 listener grpc:Listener ep = new (9090);
 
-
-service caliSongStorageSystem on ep {
 mongodb:ClientConfig mongoConfig = {
         host: "localhost",
         port: 27017,
@@ -19,6 +17,9 @@ mongodb:ClientConfig mongoConfig = {
     mongodb:Client serverDatabase = checkpanic new (mongoConfig);
     mongodb:Database mongoDatabase = checkpanic serverDatabase->getDatabase("RecordCali");
     mongodb:Collection mongoCollection = checkpanic mongoDatabase->getCollection("record");
+
+
+service caliSongStorageSystem on ep {
 
     resource function writerecord(grpc:Caller ResponseRecord, calirecord requestedRecord) {
         // Implementation goes here.
