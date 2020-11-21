@@ -47,5 +47,9 @@ message calirecord {
     repeated Song songs=3;
     string band=4;
     string record_key=5;
-    string record_version=6;
+     record_version=6;
+}
+message cali2{
+string t=1;
+
 }
