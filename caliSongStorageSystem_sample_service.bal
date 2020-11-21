@@ -168,8 +168,12 @@ service caliSongStorageSystem on ep {
                 }
                 else
                 {
-                    io:println("There is no record with TheABC band name.");
+                    io:println("There is no record .");
                 }
+		calirecord result={record_key:updateRequest.record_key,record_version:updateRequest.record_version};
+                         var res=updateResponse->send(result);
+                         res=updateResponse->complete();
+       
         // You should return a calirecord
     }
     resource function ReadCriterionCombination(grpc:Caller caller, CriterionCombination value) {
