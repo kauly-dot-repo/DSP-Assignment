@@ -9,9 +9,153 @@ listener grpc:Listener ep = new (9090);
 
 
 service caliSongStorageSystem on ep {
+mongodb:ClientConfig mongoConfig = {
+        host: "localhost",
+        port: 27017,
+        // username: "admin",
+        // password: "admin",
+        options: {sslEnabled: false, serverSelectionTimeout: 6000}
+    };
+    mongodb:Client serverDatabase = checkpanic new (mongoConfig);
+    mongodb:Database mongoDatabase = checkpanic serverDatabase->getDatabase("RecordCali");
+    mongodb:Collection mongoCollection = checkpanic mongoDatabase->getCollection("record");
 
     resource function writerecord(grpc:Caller ResponseRecord, calirecord requestedRecord) {
         // Implementation goes here.
+	
+	
+    resource function writerecord(grpc:Caller ResponseRecord, calirecord requestedRecord) {
+        // Implementation goes here.
+        //Implementation of the hash function
+        string r="1.0";
+            
+            string hashkey = requestedRecord.toString();
+            byte[] hashByte = hashkey.toBytes();
+            byte[] KeyHash = crypto:hashMd5(hashByte);
+            
+             map<json>|error JsonFile = map<json>.constructFrom(requestedRecord);
+            map<json> Assigning = <map<json>>JsonFile;
+          Assigning["record_key"]=KeyHash.toBase16();
+          string kv=KeyHash.toBase16();
+          
+                        
+
+          if (JsonFile is error)
+          {
+              io:println("Error");
+          }
+          else
+          {
+              io:println("dataBase");
+
+             map<json> [] AllSpecificRecord= checkpanic  mongoCollection->find({"record_key":KeyHash.toBase16()});
+             
+            if (AllSpecificRecord.length()>0)
+            {
+                    io:println("=========ALL THE RECORDS THAT HAVE THE KEY ",kv," =====================");
+                    io:println(AllSpecificRecord.toJsonString());
+                    float [] kvfArray=[];
+                    int i=0 ;
+                    foreach var item in AllSpecificRecord {
+                        if (item.record_key==kv)
+                        {
+                        
+                            io:println("------------RECORDS WITH THAT KEY-----------");
+                            io:println(item);
+                            string jkv=<string>item.record_version;
+                            float|error kvf = 'float:fromString(jkv);
+                                    kvfArray[i]=<float>kvf;
+                                    i+=1;
+                        }
+
+                        
+                    }
+            // if there is a/are record/s with the current record key
+            
+                    float greatestVersion=kvfArray[0];
+                    foreach var item in kvfArray {
+                        if (item>greatestVersion) {
+                            greatestVersion=item;
+                                                        
+                        }
+                        
+                    }
+                        //greatestVersion+=0.1;
+                        
+                         r=greatestVersion.toString().substring(0,3);   
+                        //io:println(r);                   
+                        //Assigning["record_version"]=r;
+                        io:println(JsonFile);
+                        keyVersion result={record_key:KeyHash.toBase16(),record_version:r};
+                        //checkpanic mongoCollection->insert(JsonFile);
+                        var res=ResponseRecord->send(result);
+                        res=ResponseRecord->complete();
+                        r="1.0";
+                        io:println("This record already exist.");
+                        //elseOfrecordKeyfound=0;
+                
+            
+
+            }
+            else {
+                        io:println("There is no record in the database with this key, it is a new record!!!");
+                        Assigning["record_version"]=r;
+                        io:println(JsonFile);
+                        keyVersion result={record_key:KeyHash.toBase16(),record_version:r};
+                        checkpanic mongoCollection->insert(JsonFile);
+                        var    res=ResponseRecord->send(result);
+                        res=ResponseRecord->complete();
+            }
+                    
+          }
+                      
+        // You should return a keyVersion
+    }
+    resource function updateRecord(grpc:Caller updateResponse, UpdateRecordCopy updateRequest) {
+        // Implementation goes here.
+         io:println("-------------UPDATE-------------");
+        map<json>|error JsonFile = map<json>.constructFrom(updateRequest);
+         io:println("---------------objecct RECORD----------");
+        io:println(updateRequest.toString());
+        io:println("---------------JSON UPDATE RECORD----------");
+        io:println(JsonFile.toString());
+        
+        map<json>|error JsonFile1 = map<json>.constructFrom(updateRequest.recordCopy);
+        map<json> [] SpecificRecord = checkpanic  mongoCollection->find({"record_key":updateRequest.record_key,"record_version":updateRequest.record_version});
+        if (SpecificRecord.length()>0) {
+                io:println("--------------Records from database with key nd version-------------");
+        io:println(SpecificRecord.toString());
+        json JsonSpecificRecord =<json>SpecificRecord[0];
+         json|error versionDB= JsonSpecificRecord.record_version;
+        
+         io:println("----------The version------------------/n");
+         io:println(versionDB);
+        
+         map<json> Assigning = <map<json>>JsonFile1;
+         Assigning["record_key"]=updateRequest.record_key;
+          float|error  vfe = 'float:fromString(versionDB.toString());
+          float vf=<float> vfe;
+                     vf+=0.1;
+                     string versionDBs=vf.toString().substring(0,3); 
+         Assigning["record_version"]=versionDBs;
+         keyVersion result={record_key:updateRequest.record_key,record_version:updateRequest.record_version};
+                         var res=updateResponse->send(result);
+                         res=updateResponse->complete();
+       
+         io:println("---------------RECORD cali inside the updateRecord ----------");
+         io:println(JsonFile1.toString());
+         map<json> filedb=<map<json>>JsonFile1;
+         io:println("---------------------------Record copy sent to the database----------------------");
+        checkpanic mongoCollection->insert(filedb);
+            
+        }
+        else
+        {
+
+            io:println("Record does exit!!!");
+        }
+        // You should return a keyVersion
+    }
         //Implementation of the hash function
        
           }
