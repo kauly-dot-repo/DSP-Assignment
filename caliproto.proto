@@ -49,7 +49,3 @@ message calirecord {
     string record_key=5;
      record_version=6;
 }
-message cali2{
-string t=1;
-
-}
