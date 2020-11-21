@@ -114,54 +114,7 @@ service caliSongStorageSystem on ep {
     }
     resource function updateRecord(grpc:Caller updateResponse, UpdateRecordCopy updateRequest) {
         // Implementation goes here.
-         io:println("-------------UPDATE-------------");
-        map<json>|error JsonFile = map<json>.constructFrom(updateRequest);
-         io:println("---------------objecct RECORD----------");
-        io:println(updateRequest.toString());
-        io:println("---------------JSON UPDATE RECORD----------");
-        io:println(JsonFile.toString());
-        
-        map<json>|error JsonFile1 = map<json>.constructFrom(updateRequest.recordCopy);
-        map<json> [] SpecificRecord = checkpanic  mongoCollection->find({"record_key":updateRequest.record_key,"record_version":updateRequest.record_version});
-        if (SpecificRecord.length()>0) {
-                io:println("--------------Records from database with key nd version-------------");
-        io:println(SpecificRecord.toString());
-        json JsonSpecificRecord =<json>SpecificRecord[0];
-         json|error versionDB= JsonSpecificRecord.record_version;
-        
-         io:println("----------The version------------------/n");
-         io:println(versionDB);
-        
-         map<json> Assigning = <map<json>>JsonFile1;
-         Assigning["record_key"]=updateRequest.record_key;
-          float|error  vfe = 'float:fromString(versionDB.toString());
-          float vf=<float> vfe;
-                     vf+=0.1;
-                     string versionDBs=vf.toString().substring(0,3); 
-         Assigning["record_version"]=versionDBs;
-         keyVersion result={record_key:updateRequest.record_key,record_version:updateRequest.record_version};
-                         var res=updateResponse->send(result);
-                         res=updateResponse->complete();
-       
-         io:println("---------------RECORD cali inside the updateRecord ----------");
-         io:println(JsonFile1.toString());
-         map<json> filedb=<map<json>>JsonFile1;
-         io:println("---------------------------Record copy sent to the database----------------------");
-        checkpanic mongoCollection->insert(filedb);
-            
-        }
-        else
-        {
-
-            io:println("Record does exit!!!");
-        }
-        // You should return a keyVersion
-    }
-        //Implementation of the hash function
-       
-          }
-                      
-        // You should return a keyVersion
+         
     }
     resource function updateRecord(grpc:Caller updateResponse, UpdateRecordCopy updateRequest) {
         // Implementation goes here.
