@@ -161,7 +161,15 @@ service caliSongStorageSystem on ep {
     }
     resource function ReadRecordKeyVersion(grpc:Caller caller, keyVersion value) {
         // Implementation goes here.
-
+		map<json> [] AllSpecificRecord= checkpanic  mongoCollection->find({"record_key":value.record_key});
+                if (AllSpecificRecord.length()>0) {
+                    io:println("\n==========all record with the date======================");
+                    io:println(AllSpecificRecord.toJsonString());
+                }
+                else
+                {
+                    io:println("There is no record with TheABC band name.");
+                }
         // You should return a calirecord
     }
     resource function ReadCriterionCombination(grpc:Caller caller, CriterionCombination value) {
