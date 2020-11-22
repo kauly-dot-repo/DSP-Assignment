@@ -24,3 +24,8 @@ message UpdateRecordCopy{
     string record_version=2;
     calirecord recordCopy=3;
 }
+message keyVersion{
+    
+    string record_key=1;
+    string record_version=2;
+}
