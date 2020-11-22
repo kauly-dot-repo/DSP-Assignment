@@ -197,7 +197,7 @@ service caliSongStorageSystem on ep {
     resource function ReadRecordKey(grpc:Caller caller, keyReading value) {
         // Implementation goes here.
 
-   string kv=value.record_key;
+        string kv=value.record_key;
             map<json> [] AllSpecificRecord= checkpanic  mongoCollection->find({"record_key":value.record_key});
             if (AllSpecificRecord.length()>0)
             {
@@ -220,6 +220,28 @@ service caliSongStorageSystem on ep {
 
                         
                     }
+                    
+                    
+                // if there is a/are record/s with the current record key
+            
+                    float greatestVersion=kvfArray[0];
+                    foreach var item in kvfArray {
+                        if (item>greatestVersion) {
+                            greatestVersion=item;
+                                                        
+                        }
+                        
+                    }
+                        string r=greatestVersion.toString().substring(0,3); 
+                        //Getting the record that has the last version
+                        map<json> [] RecordLastVersion= checkpanic  mongoCollection->find({"record_key":value.record_key,"record_version":r});  
+                        var res=caller->send(RecordLastVersion.toString());
+                        res=caller->complete();
+            }
+            else
+            {
+                io:println("There is no record with this key!!!");
+            }
         // You should return a calirecord
     }
     resource function ReadRecordKeyVersion(grpc:Caller caller, keyVersion value) {
