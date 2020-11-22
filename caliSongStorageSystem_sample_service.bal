@@ -1,6 +1,23 @@
 import ballerina/grpc;
+import ballerina/io;
+import ballerina/crypto;
+import ballerina/mongodb;
+import ballerina/lang.'float;
 
 listener grpc:Listener ep = new (9090);
+
+
+
+mongodb:ClientConfig mongoConfig = {
+        host: "localhost",
+        port: 27017,
+        // username: "admin",
+        // password: "admin",
+        options: {sslEnabled: false, serverSelectionTimeout: 6000}
+    };
+    mongodb:Client serverDatabase = checkpanic new (mongoConfig);
+    mongodb:Database mongoDatabase = checkpanic serverDatabase->getDatabase("RecordCali");
+    mongodb:Collection mongoCollection = checkpanic mongoDatabase->getCollection("record");
 
 service caliSongStorageSystem on ep {
 
