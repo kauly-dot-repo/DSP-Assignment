@@ -19,3 +19,8 @@ message CriterionCombination {
 message keyReading {
     string record_key=1;
 }
+message UpdateRecordCopy{
+    string record_key=1;
+    string record_version=2;
+    calirecord recordCopy=3;
+}
