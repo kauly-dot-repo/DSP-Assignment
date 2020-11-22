@@ -261,7 +261,13 @@ service caliSongStorageSystem on ep {
     }
     resource function ReadCriterionCombination(grpc:Caller caller, CriterionCombination value) {
         // Implementation goes here.
-
+         io:println("--------------------------All records by band name-----------------------");
+         map<json> [] bands = checkpanic  mongoCollection->find({"band":value.bandName});
+         if (bands.length()>0) {
+                io:println("--------------Records from database BAND-------------");
+               io:println(bands.toString());
+         }
+         else{io:println("There is no record with that band name!!!");}
         // You should return a TotalRecords
     }
 }
