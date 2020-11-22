@@ -29,3 +29,8 @@ message keyVersion{
     string record_key=1;
     string record_version=2;
 }
+message Artist {
+    string name = 1;
+    enum Member {YES = 0;NO = 1;}
+      Member member = 2;
+}
