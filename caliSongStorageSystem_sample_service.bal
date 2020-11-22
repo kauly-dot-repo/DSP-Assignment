@@ -268,6 +268,15 @@ service caliSongStorageSystem on ep {
                io:println(bands.toString());
          }
          else{io:println("There is no record with that band name!!!");}
+         
+         
+           io:println("--------------------------All records by date-----------------------");
+         map<json> [] dates = checkpanic  mongoCollection->find({"date":value.SongDate});
+         if (dates.length()>0) {
+                io:println("--------------Records from database dates-------------");
+               io:println(dates.toString());
+         }
+         else{io:println("There is no record with that date!!!");}
         // You should return a TotalRecords
     }
 }
