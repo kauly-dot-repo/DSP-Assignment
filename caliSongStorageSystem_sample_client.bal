@@ -93,6 +93,24 @@ public function main (string... args) {
                 [wantedrk,trash]=  getRecordByKey; //both the keyVersion info we want and trash are saved in getupdateResult
                 io:println(wantedrk);//this allows us to only print what we want
             }
-
+     io:println("===================Reading Record by key and version==================");
+        keyVersion keyv={
+                 "record_key":"0a54d6aadf75bfe2aba4618ca85dcf31",
+                 "record_version":"1.1"
+                };
+            var  getRecordByKeyVersion=  blockingConection->ReadRecordKeyVersion(keyv);
+            
+             if(getRecordByKeyVersion is grpc:Error)
+            {
+                io:println(getRecordByKeyVersion.reason());//.reason() will help get the error
+                io:println("oooooobad0ooooooo");
+            }
+            else{
+            
+                calirecord wantedrkv;
+                grpc:Headers trash;//strange output that we don't want
+                [wantedrkv,trash]=  getRecordByKeyVersion; //both the keyVersion info we want and trash are saved in getupdateResult
+                io:println(wantedrkv);//this allows us to only print what we want
+            }
 
 
