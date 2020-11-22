@@ -12,8 +12,8 @@ message TotalRecords {
 }
 
 message CriterionCombination {
-    string ArtistName=1;
-    string SongTitle=2;
+    string SongDate=1;
+    string record_version=2;
     string bandName=3;
 
 message keyReading {
