@@ -112,5 +112,10 @@ public function main (string... args) {
                 [wantedrkv,trash]=  getRecordByKeyVersion; //both the keyVersion info we want and trash are saved in getupdateResult
                 io:println(wantedrkv);//this allows us to only print what we want
             }
-
+  io:println("===================Reading record By Criterion==================");
+        CriterionCombination crite={
+                 "ArtistName":"Ana",
+                 "SongTitle":"hi",
+                 "bandName":"abc"
+                };
 
