@@ -285,6 +285,13 @@ service caliSongStorageSystem on ep {
                io:println(version.toString());
          }
          else{io:println("There is no record with that date!!!");}
+         json all[]=[];
+         all[0]=bands;
+         all[0]=dates;
+         all[0]=versions;
+         
+         io:println("---------------------------Record copy sent to the client----------------------");
+                       calirecord result=caller->send(all.toString());
          
         // You should return a TotalRecords
     }
