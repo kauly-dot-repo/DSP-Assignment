@@ -10,5 +10,8 @@ service  caliSongStorageSystem{
 message TotalRecords {
     repeated calirecord records = 1;
 }
-
+message CriterionCombination {
+    string ArtistName=1;
+    string SongTitle=2;
+    string bandName=3;
 
