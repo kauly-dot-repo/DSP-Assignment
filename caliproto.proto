@@ -40,3 +40,11 @@ message Song {
     string genre=2;
     string platform=3;
 }
+message calirecord {
+    string date=1;
+    repeated Artist artists=2;      
+    repeated Song songs=3;
+    string band=4;
+    string record_key=5;
+    string record_version=6;
+}
