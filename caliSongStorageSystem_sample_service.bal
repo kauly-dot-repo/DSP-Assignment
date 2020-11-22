@@ -62,7 +62,30 @@ service caliSongStorageSystem on ep {
                                     kvfArray[i]=<float>kvf;
                                     i+=1;
                         }   
-                    }            
+                    }       
+                    if there is a/are record/s with the current record key
+            
+                    float greatestVersion=kvfArray[0];
+                    foreach var item in kvfArray {
+                        if (item>greatestVersion) {
+                            greatestVersion=item;
+                                                        
+                        }
+                        
+                    }
+                
+                        r=greatestVersion.toString().substring(0,3);   
+                        io:println(JsonFile);
+                        keyVersion result={record_key:KeyHash.toBase16(),record_version:r};
+                        var res=ResponseRecord->send(result);
+                        res=ResponseRecord->complete();
+                        r="1.0";
+                        io:println("This record already exist.");
+                        
+                
+            
+
+            }
                                 
                                 
         // You should return a keyVersion
