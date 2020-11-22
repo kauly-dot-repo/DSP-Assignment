@@ -117,6 +117,25 @@ service caliSongStorageSystem on ep {
          map<json> [] AllSpecificRecord= checkpanic  mongoCollection->find({"record_key":updateRequest.record_key});
          string kv=updateRequest.record_key;
         // You should return a keyVersion
+        if (AllSpecificRecord.length()>0)
+            {
+                    io:println("=========ALL THE RECORDS THAT HAVE THE KEY ",kv," =====================");
+                    io:println(AllSpecificRecord.toJsonString());
+                    float [] kvfArray=[];
+                    int i=0 ;
+                    foreach var item in AllSpecificRecord
+                    {
+                        if (item.record_key==kv)
+                        {
+                        
+                            io:println("------------RECORDS WITH THAT KEY-----------");
+                            io:println(item);
+                            string jkv=<string>item.record_version;
+                            float|error kvf = 'float:fromString(jkv);
+                                    kvfArray[i]=<float>kvf;
+                                    i+=1;
+                        }  
+                    }
     }
     resource function ReadRecordKey(grpc:Caller caller, keyReading value) {
         // Implementation goes here.
