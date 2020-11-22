@@ -113,9 +113,9 @@ public function main (string... args) {
                 io:println(wantedrkv);//this allows us to only print what we want
             }
   io:println("===================Reading record By Criterion==================");
-        CriterionCombination crite={
-                 "ArtistName":"Ana",
-                 "SongTitle":"hi",
+        CriterionCombination crite={ 
+                 "SongDate":"17/10/200",
+                 "record_version":"1.2",
                  "bandName":"abc"
                 };
 
