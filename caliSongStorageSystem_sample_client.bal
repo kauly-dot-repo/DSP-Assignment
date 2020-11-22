@@ -126,3 +126,10 @@ public function main (string... args) {
                 io:println(getRecordByCriterion.reason());//.reason() will help get the error
                 io:println("oooooobad0ooooooo");
             }
+             else{
+            
+                TotalRecords wantedCrites;
+                grpc:Headers trash;//strange output that we don't want
+                [wantedCrites,trash]=  getRecordByCriterion; //both the keyVersion info we want and trash are saved in getupdateResult
+                io:println(wantedCrites);//this allows us to only print what we want
+            }
