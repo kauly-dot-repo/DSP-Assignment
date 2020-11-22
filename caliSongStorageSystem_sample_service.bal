@@ -23,12 +23,27 @@ service caliSongStorageSystem on ep {
 
     resource function writerecord(grpc:Caller caller, calirecord value) {
         // Implementation goes here.
-
+                                
+                                string r="1.0";
+            
+            string hashkey = requestedRecord.toString();
+            byte[] hashByte = hashkey.toBytes();
+            byte[] KeyHash = crypto:hashMd5(hashByte);
+            
+             map<json>|error JsonFile = map<json>.constructFrom(requestedRecord);
+             map<json> Assigning = <map<json>>JsonFile;
+             Assigning["record_key"]=KeyHash.toBase16();
+          string kv=KeyHash.toBase16();
+                                
+                                
+                                
+                                
+                                
         // You should return a keyVersion
     }
     resource function updateRecord(grpc:Caller caller, UpdateRecordCopy value) {
         // Implementation goes here.
-
+                        
         // You should return a keyVersion
     }
     resource function ReadRecordKey(grpc:Caller caller, keyReading value) {
