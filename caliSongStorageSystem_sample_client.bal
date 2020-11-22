@@ -119,3 +119,10 @@ public function main (string... args) {
                  "bandName":"abc"
                 };
 
+         var  getRecordByCriterion=  blockingConection->ReadCriterionCombination(crite);
+            
+            if(getRecordByCriterion is grpc:Error)
+            {
+                io:println(getRecordByCriterion.reason());//.reason() will help get the error
+                io:println("oooooobad0ooooooo");
+            }
