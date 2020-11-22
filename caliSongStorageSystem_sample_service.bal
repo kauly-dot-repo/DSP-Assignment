@@ -24,7 +24,7 @@ service caliSongStorageSystem on ep {
     resource function writerecord(grpc:Caller caller, calirecord value) {
         // Implementation goes here.
                                 
-                                string r="1.0";
+         string r="1.0";
             
             string hashkey = requestedRecord.toString();
             byte[] hashByte = hashkey.toBytes();
@@ -33,9 +33,23 @@ service caliSongStorageSystem on ep {
              map<json>|error JsonFile = map<json>.constructFrom(requestedRecord);
              map<json> Assigning = <map<json>>JsonFile;
              Assigning["record_key"]=KeyHash.toBase16();
-          string kv=KeyHash.toBase16();
+             string kv=KeyHash.toBase16();
                                 
-                                
+          if (JsonFile is error)
+          {
+              io:println("Error");
+          }
+          else
+          {
+              io:println("dataBase");
+
+             map<json> [] AllSpecificRecord= checkpanic  mongoCollection->find({"record_key":KeyHash.toBase16()});
+             
+            if (AllSpecificRecord.length()>0)
+            {
+                    io:println("=========ALL THE RECORDS THAT HAVE THE KEY ",kv," =====================");
+                    io:println(AllSpecificRecord.toJsonString());
+                    float [] kvfArray=[];
                                 
                                 
                                 
