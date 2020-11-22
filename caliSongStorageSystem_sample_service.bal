@@ -23,10 +23,6 @@ service caliSongStorageSystem on ep {
 
     resource function writerecord(grpc:Caller ResponseRecord, calirecord requestedRecord) {
         // Implementation goes here.
-	
-	
-    resource function writerecord(grpc:Caller ResponseRecord, calirecord requestedRecord) {
-        // Implementation goes here.
         //Implementation of the hash function
         string r="1.0";
             
