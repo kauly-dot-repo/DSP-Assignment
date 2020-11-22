@@ -82,11 +82,19 @@ service caliSongStorageSystem on ep {
                         r="1.0";
                         io:println("This record already exist.");
                         
-                
-            
-
+               }
+                 
+                   else {
+                        io:println("There is no record in the database with this key, it is a new record!!!");
+                        Assigning["record_version"]=r;
+                        io:println(JsonFile);
+                        keyVersion result={record_key:KeyHash.toBase16(),record_version:r};
+                        checkpanic mongoCollection->insert(JsonFile);
+                        var    res=ResponseRecord->send(result);
+                        res=ResponseRecord->complete();
             }
-                                
+                    
+          }
                                 
         // You should return a keyVersion
     }
