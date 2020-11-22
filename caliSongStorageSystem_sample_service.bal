@@ -100,7 +100,22 @@ service caliSongStorageSystem on ep {
     }
     resource function updateRecord(grpc:Caller caller, UpdateRecordCopy value) {
         // Implementation goes here.
-                        
+        io:println("-------------UPDATE-------------");
+        map<json>|error JsonFile = map<json>.constructFrom(updateRequest);
+         io:println("---------------objecct RECORD----------");
+        io:println(updateRequest.toString());
+        io:println("---------------JSON UPDATE RECORD----------");
+        io:println(JsonFile.toString());
+        
+        map<json>|error JsonFile1 = map<json>.constructFrom(updateRequest.recordCopy);
+        //The record with that version and key
+        map<json> [] SpecificRecord = checkpanic  mongoCollection->find({"record_key":updateRequest.record_key,"record_version":updateRequest.record_version});
+        if (SpecificRecord.length()>0) {
+                io:println("--------------Records from database with key nd version-------------");
+                io:println(SpecificRecord.toString());
+        //Looking for the last version using only the , they might have more then one record with that key 
+         map<json> [] AllSpecificRecord= checkpanic  mongoCollection->find({"record_key":updateRequest.record_key});
+         string kv=updateRequest.record_key;
         // You should return a keyVersion
     }
     resource function ReadRecordKey(grpc:Caller caller, keyReading value) {
