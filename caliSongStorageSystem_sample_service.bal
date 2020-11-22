@@ -165,6 +165,34 @@ service caliSongStorageSystem on ep {
                                     i+=1;
                         }  
                     }
+                    float greatestVersion=kvfArray[0];
+                    foreach var item in kvfArray 
+                    {
+                        if (item>greatestVersion) 
+                        {
+                            greatestVersion=item;
+                                                        
+                        }
+                        
+                    }
+                        greatestVersion+=0.1;
+                         string r=greatestVersion.toString().substring(0,3);
+                         map<json> Assigning = <map<json>>JsonFile1;
+                         Assigning["record_key"]=updateRequest.record_key;
+                         Assigning["record_version"]=r;
+                         io:println("---------------RECORD cali inside the updateRecord ----------");
+                         io:println(JsonFile1.toString());
+                         keyVersion result={record_key:updateRequest.record_key,record_version:r};
+                         var res=updateResponse->send(result);
+                         res=updateResponse->complete();
+                         map<json> filedb=<map<json>>JsonFile1;
+                         io:println("---------------------------Record copy sent to the database----------------------");
+                         checkpanic mongoCollection->insert(filedb);     
+        }
+        }
+        else{
+            io:println("There is no record with this key and version!!!");
+        }
     }
     resource function ReadRecordKey(grpc:Caller caller, keyReading value) {
         // Implementation goes here.
