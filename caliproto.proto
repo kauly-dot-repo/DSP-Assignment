@@ -1,1 +1,9 @@
+<syntax = "proto3";
 
+service  caliSongStorageSystem{
+       rpc writerecord(calirecord)returns(keyVersion);
+       rpc updateRecord(UpdateRecordCopy) returns (keyVersion);
+       rpc ReadRecordKey (keyReading) returns (calirecord);
+       rpc ReadRecordKeyVersion (keyVersion) returns (calirecord);
+       rpc ReadCriterionCombination (CriterionCombination) returns (TotalRecords);
+}
